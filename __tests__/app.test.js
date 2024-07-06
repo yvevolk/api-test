@@ -13,3 +13,17 @@ describe('invalid endpoint', () => {
         })
     })
 })
+
+describe.only('/repositories', () => {
+    it('returns 200 when requesting repositories endpoint', () => {
+        return supertest(app).get('/repositories')
+        .expect(200)
+    });
+//search term "crowpilot" should only give 2 repos
+    it('returns array of repo results when querying endpoint', () => {
+        return supertest(app).get('/repositories?name=crowpilot')
+        .expect(200).then((res) => {
+            expect(res.body.length).toBe(2)
+        })
+    })
+})
