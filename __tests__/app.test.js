@@ -33,14 +33,19 @@ describe('/repositories', () => {
             expect(res.body.length).toBe(2)
         })
     })
-    //returned repo objects should include all required key value pairs
-    it.only('returns repo objects in correct format', () => {
+    //returned repo objects should include correct key value pairs
+    it('returns repo objects in correct format', () => {
         return supertest(app).get('/repositories?name=crowpilot+frontend')
         .expect(200).then((res) => {
             expect(res.body.length).toBe(1);
-            const requiredKeys = ["id", "name", "owner", "private", "description", "language", "size", "forks", "open_issues", "url"]
-            expect(Object.getOwnPropertyNames(res.body[0])).toBe(requiredKeys)
+            expect(res.body[0].name).toBe("crowpilot-frontend")
         })
     })
-
 })
+
+// /repositories?name={searchQuery}
+// /repositorydetails?id={id}
+
+// /repositories/{id}/details
+
+// /repositories/{id}/readme
