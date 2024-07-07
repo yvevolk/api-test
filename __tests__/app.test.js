@@ -14,13 +14,13 @@ describe('invalid endpoint', () => {
     })
 })
 
-describe.only('/repositories', () => {
+describe('/repositories', () => {
     it('returns 200 when requesting repositories endpoint', () => {
         return supertest(app).get('/repositories')
         .expect(200)
     });
      //random gibberish that returns no repos
-    it.only('returns empty array when query has no results', () => {
+    it('returns empty array when query has no results', () => {
         return supertest(app).get('/repositories?name=tndksorn42352')
         .expect(200).then((res) => {
             expect(res.body.length).toBe(0)
@@ -31,6 +31,15 @@ describe.only('/repositories', () => {
         return supertest(app).get('/repositories?name=crowpilot')
         .expect(200).then((res) => {
             expect(res.body.length).toBe(2)
+        })
+    })
+    //returned repo objects should include all required key value pairs
+    it.only('returns repo objects in correct format', () => {
+        return supertest(app).get('/repositories?name=crowpilot+frontend')
+        .expect(200).then((res) => {
+            expect(res.body.length).toBe(1);
+            const requiredKeys = ["id", "name", "owner", "private", "description", "language", "size", "forks", "open_issues", "url"]
+            expect(Object.getOwnPropertyNames(res.body[0])).toBe(requiredKeys)
         })
     })
 
