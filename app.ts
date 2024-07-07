@@ -1,6 +1,6 @@
 require('dotenv').config();
 import express, { Request, Response } from 'express';
-import {getRepos} from './controllers/controllers';
+import { getRepos } from './controllers/controllers';
 
 const app = express();
 
