@@ -34,11 +34,13 @@ describe('/repositories', () => {
         })
     })
     //returned repo objects should include correct key value pairs
-    it('returns repo objects in correct format', () => {
+    it('returns repo objects with correct key value pairs', () => {
         return supertest(app).get('/repositories?name=crowpilot+frontend')
         .expect(200).then((res) => {
             expect(res.body.length).toBe(1);
-            expect(res.body[0].name).toBe("crowpilot-frontend")
+            expect(res.body[0].name).toBe("crowpilot-frontend");
+            expect(res.body[0].forks).toBe(1)
+            expect(res.body[0].open_issues).toBe(0)
         })
     })
 
