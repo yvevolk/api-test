@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { ApiResult, FinalResult} from '../models/models';
+import { ReposApiResult, ReposFinalResult, RepoByIdApiResult } from '../models/models';
 import axios from "axios";
 
 const request = axios.create({
-    baseURL: "https://api.github.com/search"
+    baseURL: "https://api.github.com/"
 });
 
-function getRepos (req: Request<{},{},{},{name: string}>, res: Response): Promise<FinalResult> {
+function getRepos (req: Request<{},{},{},{name: string}>, res: Response): Promise<ReposFinalResult> {
     return new Promise ((resolve, reject) => {
          const query = req.query.name;
             findRepos(query)
@@ -14,20 +14,48 @@ function getRepos (req: Request<{},{},{},{name: string}>, res: Response): Promis
                     res.status(200).send(results.items);
                  })
                 .catch((err: Error) => {
-                    reject(err)});
+                    reject(err)
+                });
     });
 }
 
-function findRepos (query: string): Promise<ApiResult> {
+function findRepos (query: string): Promise<ReposApiResult> {
     return new Promise ((resolve, reject) => {
-        request.get(`/repositories?q=${query}`)
+        request.get(`/search/repositories?q=${query}`)
             .then((results) => {
-                const returnResults: ApiResult = results.data;
+                const returnResults: ReposApiResult = results.data;
                 resolve(returnResults);
             })
             .catch((err: Error) => {
-                reject(err)});
+                reject(err)
+            });
     })
 }
 
-export {getRepos, findRepos};
+function getRepoById (req: Request<{id: number}, {}, {}, {}>, res: Response): Promise<RepoByIdApiResult> {
+    return new Promise ((resolve, reject) => {
+        const params = req.params.id;
+        findRepoById(params)
+            .then((results) => {
+                res.status(200).send(results)
+            })
+            .catch((err: Error) => {
+                res.status(404).send({message: 'Repository not found'})
+            })
+    })
+}
+
+function findRepoById (query: number): Promise<RepoByIdApiResult> {
+    return new Promise ((resolve, reject) => {
+        request.get(`/repositories/${query}`)
+            .then((results) => {
+                const returnResults: RepoByIdApiResult = results.data;
+                resolve(returnResults)
+            })
+            .catch((err: Error) => {
+                reject(err)
+            });
+    } )
+}
+
+export {getRepos, findRepos, getRepoById, findRepoById};

@@ -1,6 +1,6 @@
 require('dotenv').config();
-import express, { Request, Response } from 'express';
-import { getRepos } from './controllers/controllers';
+import express, { NextFunction, Request, Response } from 'express';
+import { getRepos, getRepoById } from './controllers/controllers';
 
 const app = express();
 
@@ -12,9 +12,10 @@ app.use(express.json());
 
 app.get('/repositories', getRepos);
 
-app.all('/*', function (req: Request, res: Response) {
-    res.status(404).send({message: 'endpoint does not exist'});
-})
+app.get('/repositorydetails/:id', getRepoById);
 
+app.all('/*', function (req: Request, res: Response) {
+    res.status(404).send({message: 'Endpoint not found'});
+})
 
 export {app, server};
