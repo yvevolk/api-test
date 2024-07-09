@@ -6,7 +6,7 @@ import base64 from "js-base64";
 const request = axios.create({
     baseURL: "https://api.github.com/",
     //comment out line below if not using auth token
-    headers: { Authorization: `Bearer ${process.env.AUTH_TOKEN}`}
+    //headers: { Authorization: `Bearer ${process.env.AUTH_TOKEN}`}
 });
 
 function getRepos (req: Request<{},{},{},{name: string}>, res: Response, next:NextFunction): Promise<ReposFinalResult> {

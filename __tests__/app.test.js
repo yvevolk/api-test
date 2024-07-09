@@ -1,4 +1,4 @@
-const { app, server } = require('../app');
+const { app, server } = require('../src/app');
 const supertest = require('supertest');
 
 afterAll(() => {
