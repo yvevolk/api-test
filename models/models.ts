@@ -31,4 +31,12 @@ interface RepoByIdApiResult {
     open_issues_count: number
 }
 
-export {ReposApiResult, ReposFinalResult, RepoByIdApiResult};
+interface ReadmeApiResult {
+    name: string,
+    url: string,
+    size: number,
+    content: string
+}
+
+
+export { ReposApiResult, ReposFinalResult, RepoByIdApiResult, ReadmeApiResult };

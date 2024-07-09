@@ -1,12 +1,15 @@
-import { Request, Response } from 'express';
-import { ReposApiResult, ReposFinalResult, RepoByIdApiResult } from '../models/models';
+import { NextFunction, Request, Response } from 'express';
+import { ReposApiResult, ReposFinalResult, RepoByIdApiResult, ReadmeApiResult } from '../models/models';
 import axios from "axios";
+import base64 from "js-base64";
 
 const request = axios.create({
-    baseURL: "https://api.github.com/"
+    baseURL: "https://api.github.com/",
+    //comment out line below if not using auth token
+    headers: { Authorization: `Bearer ${process.env.AUTH_TOKEN}` }
 });
 
-function getRepos (req: Request<{},{},{},{name: string}>, res: Response): Promise<ReposFinalResult> {
+function getRepos (req: Request<{},{},{},{name: string}>, res: Response, next:NextFunction): Promise<ReposFinalResult> {
     return new Promise ((resolve, reject) => {
          const query = req.query.name;
             findRepos(query)
@@ -14,7 +17,7 @@ function getRepos (req: Request<{},{},{},{name: string}>, res: Response): Promis
                     res.status(200).send(results.items);
                  })
                 .catch((err: Error) => {
-                    reject(err)
+                    next(err);
                 });
     });
 }
@@ -27,12 +30,12 @@ function findRepos (query: string): Promise<ReposApiResult> {
                 resolve(returnResults);
             })
             .catch((err: Error) => {
-                reject(err)
+                reject(err);
             });
     })
 }
 
-function getRepoById (req: Request<{id: number}, {}, {}, {}>, res: Response): Promise<RepoByIdApiResult> {
+function getRepoById (req: Request<{id: number}, {}, {}, {}>, res: Response, next: NextFunction): Promise<RepoByIdApiResult> {
     return new Promise ((resolve, reject) => {
         const params = req.params.id;
         findRepoById(params)
@@ -40,7 +43,7 @@ function getRepoById (req: Request<{id: number}, {}, {}, {}>, res: Response): Pr
                 res.status(200).send(results)
             })
             .catch((err: Error) => {
-                res.status(404).send({message: 'Repository not found'})
+                next(err)
             })
     })
 }
@@ -58,4 +61,33 @@ function findRepoById (query: number): Promise<RepoByIdApiResult> {
     } )
 }
 
-export {getRepos, findRepos, getRepoById, findRepoById};
+function getReadme (req: Request<{owner: string, repo: string}, {}, {}, {}>, res: Response, next: NextFunction): Promise<ReadmeApiResult> {
+    {
+        return new Promise ((resolve, reject) => {
+           const owner: string = req.params.owner;
+           const repo: string = req.params.repo;
+           findReadme(owner, repo)
+                .then((results) => {
+                    results.content = base64.decode(results.content);
+                    res.status(200).send(results)
+                })
+                .catch((err: Error) => {
+                    next(err)
+                })
+        })
+    }
+}
+
+function findReadme (owner: string, repo: string): Promise<ReadmeApiResult> {
+    return new Promise ((resolve, reject) => {
+        request.get(`/repos/${owner}/${repo}/readme`)
+            .then((results) => {
+                resolve(results.data)
+            })
+            .catch((err: Error) => {
+                reject(err)
+            });
+    })
+}
+
+export { getRepos, findRepos, getRepoById, findRepoById, getReadme };

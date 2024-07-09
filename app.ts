@@ -1,6 +1,6 @@
 require('dotenv').config();
 import express, { NextFunction, Request, Response } from 'express';
-import { getRepos, getRepoById } from './controllers/controllers';
+import { getRepos, getRepoById, getReadme } from './controllers/controllers';
 
 const app = express();
 
@@ -14,8 +14,23 @@ app.get('/repositories', getRepos);
 
 app.get('/repositorydetails/:id', getRepoById);
 
+app.get('/readme/:owner/:repo', getReadme);
+
+//invalid endpoint
 app.all('/*', function (req: Request, res: Response) {
     res.status(404).send({message: 'Endpoint not found'});
 })
 
-export {app, server};
+//error handler
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if (err.message.includes('404')) {
+        res.status(404).send({message: 'Not found'})}
+    else if (err.message.includes('400')) {
+        res.status(400).send({message: 'Bad request'})
+    }
+    else {
+        res.status(500).send('500: Internal server error')
+    }  
+  });
+
+export { app, server };
