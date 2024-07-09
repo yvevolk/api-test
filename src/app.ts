@@ -1,6 +1,8 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
-import { getRepos, getRepoById, getReadme } from './controllers/controllers';
+import { getRepos, getRepoById, getReadme } from './controllers/controllers.ts';
+
+dotenv.config();
 
 const app = express();
 

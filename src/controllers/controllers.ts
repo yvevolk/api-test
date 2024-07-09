@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { ReposApiResult, ReposFinalResult, RepoByIdApiResult, ReadmeApiResult } from '../models/models';
+import { ReposApiResult, ReposFinalResult, RepoByIdApiResult, ReadmeApiResult } from '../models/models.ts';
 import axios from "axios";
 import base64 from "js-base64";
 
