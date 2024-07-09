@@ -3,7 +3,7 @@ interface ReposApiResult {
     total_count: number;
     incomplete_results: boolean;
     items: object;
-}
+};
 
 interface ReposFinalResult {
     id: number,
@@ -16,7 +16,7 @@ interface ReposFinalResult {
     language: string,
     forks_count: number,
     open_issues_count: number
-}
+};
 
 interface RepoByIdApiResult {
     id: number,
@@ -29,14 +29,14 @@ interface RepoByIdApiResult {
     language: string,
     forks_count: number,
     open_issues_count: number
-}
+};
 
 interface ReadmeApiResult {
     name: string,
     url: string,
     size: number,
     content: string
-}
+};
 
 
 export { ReposApiResult, ReposFinalResult, RepoByIdApiResult, ReadmeApiResult };

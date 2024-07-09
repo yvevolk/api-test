@@ -25,9 +25,6 @@ app.all('/*', function (req: Request, res: Response) {
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.message.includes('404')) {
         res.status(404).send({message: 'Not found'})}
-    else if (err.message.includes('400')) {
-        res.status(400).send({message: 'Bad request'})
-    }
     else {
         res.status(500).send('500: Internal server error')
     }  
