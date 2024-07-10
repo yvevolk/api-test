@@ -5,7 +5,7 @@ import base64 from "js-base64";
 
 const request = axios.create({
     baseURL: "https://api.github.com/",
-    //uncomment line below if using auth token or testing with Postman
+    //uncomment line below if using auth token
     //headers: { Authorization: `Bearer ${process.env.AUTH_TOKEN}`}
 });
 
