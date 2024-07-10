@@ -18,5 +18,5 @@ Endpoints can be found at the Postman collection provided in email.
     - `AUTH_TOKEN=<token>` (your GitHub fine-grained access token).
         - Tokens are available in account settings > developer settings.
         - Authentication is not required and the relevant line (src/controllers/controllers.ts line 9) has been commented out. If running Postman HTTP requests, it should be commented out, and auth token is not required. If running Jest testing locally, this line should be uncommented and auth token provided. 
-5. Run the server with `node app.js`. `Listening on <port>` should appear in the console.
+5. Run the server with `npx ts-node src/app.ts`. `Listening on <port>` should appear in the console.
 6. Run jest tests with `npm test app`.
