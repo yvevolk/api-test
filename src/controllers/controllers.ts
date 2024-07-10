@@ -5,7 +5,7 @@ import base64 from "js-base64";
 
 const request = axios.create({
     baseURL: "https://api.github.com/",
-    //comment out line below if not using auth token
+    //uncomment line below if using auth token or testing with Postman
     //headers: { Authorization: `Bearer ${process.env.AUTH_TOKEN}`}
 });
 
@@ -20,7 +20,7 @@ function getRepos (req: Request<{},{},{},{name: string}>, res: Response, next:Ne
                     next(err);
                 });
     });
-}
+};
 
 function findRepos (query: string): Promise<ReposApiResult> {
     return new Promise ((resolve, reject) => {
@@ -32,8 +32,8 @@ function findRepos (query: string): Promise<ReposApiResult> {
             .catch((err: Error) => {
                 reject(err);
             });
-    })
-}
+    });
+};
 
 function getRepoById (req: Request<{id: number}, {}, {}, {}>, res: Response, next: NextFunction): Promise<RepoByIdApiResult> {
     return new Promise ((resolve, reject) => {
@@ -45,8 +45,8 @@ function getRepoById (req: Request<{id: number}, {}, {}, {}>, res: Response, nex
             .catch((err: Error) => {
                 next(err);
             })
-    })
-}
+    });
+};
 
 function findRepoById (query: number): Promise<RepoByIdApiResult> {
     return new Promise ((resolve, reject) => {
@@ -58,25 +58,23 @@ function findRepoById (query: number): Promise<RepoByIdApiResult> {
             .catch((err: Error) => {
                 reject(err);
             });
-    } )
-}
+    });
+};
 
 function getReadme (req: Request<{owner: string, repo: string}, {}, {}, {}>, res: Response, next: NextFunction): Promise<ReadmeApiResult> {
-    {
-        return new Promise ((resolve, reject) => {
-           const owner: string = req.params.owner;
-           const repo: string = req.params.repo;
-           findReadme(owner, repo)
-                .then((results) => {
-                    results.content = base64.decode(results.content);
-                    res.status(200).send(results);
-                })
-                .catch((err: Error) => {
-                    next(err);
-                })
-        })
-    }
-}
+    return new Promise ((resolve, reject) => {
+        const owner: string = req.params.owner;
+        const repo: string = req.params.repo;
+        findReadme(owner, repo)
+            .then((results) => {
+                results.content = base64.decode(results.content);
+                res.status(200).send(results);
+            })
+            .catch((err: Error) => {
+                next(err);
+            });
+    });
+};
 
 function findReadme (owner: string, repo: string): Promise<ReadmeApiResult> {
     return new Promise ((resolve, reject) => {
@@ -87,7 +85,7 @@ function findReadme (owner: string, repo: string): Promise<ReadmeApiResult> {
             .catch((err: Error) => {
                 reject(err);
             });
-    })
-}
+    });
+};
 
 export { getRepos, findRepos, getRepoById, findRepoById, getReadme };
